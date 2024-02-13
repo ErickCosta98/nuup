@@ -24,12 +24,10 @@ const App = () => {
 
 //funcion para optener la ubicacion del usuario
 async function getLocation() {
-
+try {
   //si el navegador no soporta la geolocalizacion
   if (!navigator.geolocation) {
-    //usar las coordenadas de la ciudad de mexico como ubicacion por defecto
-    return { latitude: 19.4326, longitude: -99.1332 };
-    
+    throw new Error('Geolocation is not supported');
   } 
     //obtener la ubicacion del usuario
     const location = await new Promise((resolve, reject) => {
@@ -40,8 +38,11 @@ async function getLocation() {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude
     };
-    
-  
+} catch (e) {
+    console.error('Error getting location:', e);
+    //usar las coordenadas de la ciudad de mexico como ubicacion por defecto
+  return { latitude: 19.4326, longitude: -99.1332 };
+}     
 }
 
 export default App;
