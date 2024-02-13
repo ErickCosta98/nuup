@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import CurrentWeather from "./components/CurrentWeather";
+import { useEffect, useState } from 'react';
+import WeatherStatus from "./components/WeatherStatus";
 
-function App() {
+const App = () => {
+  const [location, setLocation] = useState({});
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      const loc = await getLocation();
+      setLocation(loc);
+    };
+
+    fetchLocation();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex flex-col items-center justify-center w-full h-full ">
+      <CurrentWeather location={location} />
+      <WeatherStatus location={location} />
     </div>
   );
+};
+
+//funcion para optener la ubicacion del usuario
+async function getLocation() {
+
+  //si el navegador no soporta la geolocalizacion
+  if (!navigator.geolocation) {
+    //usar las coordenadas de la ciudad de mexico como ubicacion por defecto
+    return { latitude: 19.4326, longitude: -99.1332 };
+    
+  } 
+    //obtener la ubicacion del usuario
+    const location = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+    //retornar la ubicacion del usuario
+    return {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+    };
+    
+  
 }
 
 export default App;
