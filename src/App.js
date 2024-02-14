@@ -6,12 +6,10 @@ const App = () => {
   const [location, setLocation] = useState({});
 
   useEffect(() => {
-    const fetchLocation = async () => {
-      const loc = await getLocation();
-      setLocation(loc);
-    };
-
-    fetchLocation();
+     
+    getLocation().then((location) => {
+      setLocation(location);
+    });
   }, []);
 
   return (
@@ -22,8 +20,12 @@ const App = () => {
   );
 };
 
-//funcion para optener la ubicacion del usuario
-async function getLocation() {
+/**
+ * Obtiene la ubicación del usuario utilizando la geolocalización del navegador.
+ * Si la geolocalización no es compatible, se devuelve la ubicación predeterminada de la Ciudad de México.
+ * @returns {Promise<{latitude: number, longitude: number}>} La ubicación del usuario en forma de objeto con las propiedades de latitud y longitud.
+ */
+const  getLocation = async () => {
 try {
   //si el navegador no soporta la geolocalizacion
   if (!navigator.geolocation) {
@@ -33,6 +35,7 @@ try {
     const location = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
     });
+    console.log(location);
     //retornar la ubicacion del usuario
     return {
         latitude: location.coords.latitude,

@@ -43,30 +43,44 @@ const CurrentWeather = ({ location }) => {
     );
 };
 
+
+/**
+ * Obtiene los datos del clima para una ubicación dada.
+ * @param {Object} location - El objeto de ubicación que contiene latitud y longitud.
+ * @returns {Promise<Object|null>} - Una promesa que se resuelve en un objeto con los datos del clima, o null si ocurre un error.
+ */
 const fetchWeatherData = async (location) => {
+    // Si la ubicación no tiene latitud o longitud, la función se detiene y devuelve null
     if (!location.latitude || !location.longitude) {
         return null;
     }
     try {
+        // Intentamos hacer una solicitud a la API del clima con la latitud y longitud proporcionadas
         const response = await fetch(
             `${WEATHER_API_URL}/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&lang=es&appid=${WEATHER_API_KEY}`
         );
+        // Si la respuesta no es exitosa (el código de estado no es 200), lanzamos un error
         if (!response.ok) {        
-            throw new Error('Error fetching weather data:', response.statusText);
+            throw new Error('Error al obtener los datos del clima:', response.statusText);
         }
+        // Si la respuesta es exitosa, convertimos la respuesta en JSON
         const data = await response.json();
+        // Imprimimos los datos en la consola
         console.log(data);
-            return {
-                icon: data.weather[0].icon,
-                temperature: data.main.temp,
-                description: data.weather[0].description,
-                city: data.name,
-                //date en formato yyyy-mm-dd
-                date: new Date().toISOString().split('T')[0],
-            }
+        // Devolvemos un objeto con los datos del clima que necesitamos
+        return {
+            icon: data.weather[0].icon,
+            temperature: data.main.temp,
+            description: data.weather[0].description,
+            city: data.name,
+            // La fecha en formato yyyy-mm-dd
+            date: new Date().toISOString().split('T')[0],
+        }
     } catch (error) {
+        // Si hay algún error en el proceso anterior, lo registramos en la consola
         console.error(error);
+        // Devolvemos null
+        return null;
     }
 };
-
 export default CurrentWeather;

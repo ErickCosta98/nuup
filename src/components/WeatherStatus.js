@@ -21,7 +21,6 @@ const WeatherStatus = ({ location }) => {
     }
 
     return (
-        //mostar el clima de los proximos 5 dias
         <div className="flex flex-col items-center justify-center w-full h-full ">
             <h1 className="text-3xl font-bold text-nevada-600">Pronóstico del clima</h1>
             {Object.keys(weatherData).slice(1).map((date, index) => (
@@ -36,7 +35,7 @@ const WeatherStatus = ({ location }) => {
                                     alt="Weather icon"
                                 />
                             <span className="text-xl font-semibold">{date}</span>
-                            {/* mostrar la temperatura minima y maxima de este dia*/}
+                            {/* temperatura minima y maxima de este dia*/}
                             <span className="text-xl font-semibold">
                                {weatherData[date].reduce((acc, item) => Math.min(acc, item.main.temp_min), Infinity)}°C
                                 -
@@ -76,19 +75,28 @@ const WeatherStatus = ({ location }) => {
 };
 
 
+/**
+ * Obtiene los datos del clima de la API basado en la ubicación proporcionada.
+ * @param {Object} location - El objeto de ubicación que contiene latitud y longitud.
+ * @returns {Promise<Object>} - Una promesa que se resuelve en los datos del clima agrupados.
+ */
 const fetchWeatherData = async (location) => {
+    // Si la ubicación no tiene latitud o longitud, la función se detiene y no devuelve nada
     if (!location.latitude || !location.longitude) {
         return;
     }
     try {
+        // Intentamos hacer una solicitud a la API del clima con la latitud y longitud proporcionadas
         const response = await fetch(
             `${WEATHER_API_URL}/forecast?lat=${location.latitude}&lon=${location.longitude}&units=metric&lang=es&appid=${WEATHER_API_KEY}`
         );
+        // Si la respuesta no es exitosa (el código de estado no es 200), lanzamos un error
         if (!response.ok) {
-            throw new Error('Error fetching weather data:', response.statusText);
+            throw new Error('Error al obtener los datos del clima:', response.statusText);
         }
+        // Si la respuesta es exitosa, convertimos la respuesta en JSON
         const data = await response.json();
-        // Agrupar los datos por fecha
+        // Agrupamos los datos por fecha
         const groupedData = data.list.reduce((acc, item) => {
             const date = item.dt_txt.split(' ')[0];
             if (!acc[date]) {
@@ -97,10 +105,14 @@ const fetchWeatherData = async (location) => {
             acc[date].push(item);
             return acc;
         }, {});
+        // Devolvemos los datos agrupados
         return groupedData;
        
     } catch (error) {
+        // Si hay algún error en el proceso anterior, lo registramos en la consola
         console.error(error);
+        // Devolvemos un objeto vacío
+        return {};
     }
 };
 
