@@ -35,7 +35,6 @@ try {
     const location = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    console.log(location);
     //retornar la ubicacion del usuario
     return {
         latitude: location.coords.latitude,

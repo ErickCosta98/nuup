@@ -65,8 +65,6 @@ const fetchWeatherData = async (location) => {
         }
         // Si la respuesta es exitosa, convertimos la respuesta en JSON
         const data = await response.json();
-        // Imprimimos los datos en la consola
-        console.log(data);
         // Devolvemos un objeto con los datos del clima que necesitamos
         return {
             icon: data.weather[0].icon,
