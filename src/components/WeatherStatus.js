@@ -25,7 +25,7 @@ const WeatherStatus = ({ location }) => {
             <h1 className="text-3xl font-bold text-nevada-600">Pronóstico del clima</h1>
             {Object.keys(weatherData).slice(1).map((date, index) => (
                 
-                <div key={index} className='card bg-nevada-500 hover:text-nevada-100 focus:text-nevada-100 text-nevada-50 m-2 rounded-md shadow-md w-96 '
+                <div key={index} className='card bg-nevada-500 hover:text-nevada-100 focus:text-nevada-100 text-nevada-50 m-2 rounded-md shadow-md w-96 hover:w-[25rem]'
                     onClick={() => handleDateClick(date)}
                 >
                     

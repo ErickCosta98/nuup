@@ -2,6 +2,7 @@ import CurrentWeather from "./components/CurrentWeather";
 import { useEffect, useState } from 'react';
 import WeatherStatus from "./components/WeatherStatus";
 
+
 const App = () => {
   const [location, setLocation] = useState({});
 
@@ -15,7 +16,7 @@ const App = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full ">
       <CurrentWeather location={location} />
-      <WeatherStatus location={location} />
+      <WeatherStatus location={location} />      
     </div>
   );
 };
